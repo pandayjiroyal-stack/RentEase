@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RentEase | Student Rental Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a class="brand" href="#home">Rent<span>Ease</span></a>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Rent Items</a>
+    <a href="#how">How It Works</a>
+    <a href="#rentals">My Rentals</a>
+    <a href="#support">Support</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="outline-btn" onclick="openLogin()">Login</button>
+    <button class="cart-btn" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
+  </div>
+</header>
+
+<main>
+<section id="home" class="hero">
+  <div>
+    <span class="pill">🎓 Built for students & young professionals</span>
+    <h1>Rent what you need.<br><span>Save what you earn.</span></h1>
+    <p>Furniture and appliances on flexible monthly plans. No expensive purchases, no relocation headache.</p>
+    <div class="hero-buttons">
+      <a class="primary-btn" href="#products">Explore Rentals</a>
+      <button class="secondary-btn" onclick="openLogin()">Create Account</button>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="room">🛏️</div>
+    <h3>Student Room Bundle</h3>
+    <p>Bed + Study Table + Chair</p>
+    <b>From ₹899/month</b>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div><b>₹0</b><span>Large upfront purchase</span></div>
+  <div><b>1–12</b><span>Month plans</span></div>
+  <div><b>24/7</b><span>Support requests</span></div>
+  <div><b>Multi-city</b><span>Ready platform</span></div>
+</section>
+
+<section id="products" class="section">
+  <div class="section-head">
+    <div>
+      <small>PRODUCT CATALOG</small>
+      <h2>Everything for your temporary home</h2>
+    </div>
+    <input id="searchBox" oninput="renderProducts()" placeholder="Search fridge, bed, table...">
+  </div>
+  <div class="filters">
+    <button class="filter active" onclick="filterCategory('All',this)">All</button>
+    <button class="filter" onclick="filterCategory('Furniture',this)">Furniture</button>
+    <button class="filter" onclick="filterCategory('Appliances',this)">Appliances</button>
+    <button class="filter" onclick="filterCategory('Study',this)">Study</button>
+  </div>
+  <div id="productGrid" class="product-grid"></div>
+</section>
+
+<section id="how" class="section light">
+  <small>USER FLOW</small>
+  <h2>Rent in 4 simple steps</h2>
+  <div class="steps">
+    <div><i>1</i><h3>Browse</h3><p>Find furniture and appliances by category.</p></div>
+    <div><i>2</i><h3>Select Plan</h3><p>Choose a rental tenure that fits your stay.</p></div>
+    <div><i>3</i><h3>Schedule</h3><p>Enter your address and delivery date.</p></div>
+    <div><i>4</i><h3>Use & Return</h3><p>Extend, return or request maintenance anytime.</p></div>
+  </div>
+</section>
+
+<section id="rentals" class="section">
+  <small>MY RENTALS</small>
+  <h2>Active rental management</h2>
+  <div id="rentalsBox" class="empty-box">Login and book an item to see your active rentals here.</div>
+</section>
+
+<section id="support" class="section support">
+  <div>
+    <small>MAINTENANCE SUPPORT</small>
+    <h2>Something not working?</h2>
+    <p>Raise a maintenance request and our service team can handle repairs or replacement.</p>
+  </div>
+  <form onsubmit="submitSupport(event)">
+    <input id="supportItem" required placeholder="Item name">
+    <select id="supportIssue">
+      <option>Not working</option>
+      <option>Damaged</option>
+      <option>Cleaning required</option>
+      <option>Other</option>
+    </select>
+    <textarea id="supportNote" placeholder="Describe the issue"></textarea>
+    <button class="primary-btn">Submit Request</button>
+  </form>
+</section>
+
+<section id="admin" class="section admin-section">
+  <div class="section-head">
+    <div><small>ADMIN / VENDOR DEMO</small><h2>Operations Dashboard</h2></div>
+    <button class="secondary-btn" onclick="loadAdmin()">Refresh</button>
+  </div>
+  <div class="admin-grid">
+    <div class="admin-card"><span>Active Rentals</span><b id="adminRentals">0</b></div>
+    <div class="admin-card"><span>Inventory Items</span><b>8</b></div>
+    <div class="admin-card"><span>Pending Support</span><b id="adminSupport">0</b></div>
+    <div class="admin-card"><span>Estimated MRR</span><b id="adminMRR">₹0</b></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Product</th><th>Category</th><th>Rent / Month</th><th>Deposit</th><th>Availability</th></tr></thead>
+      <tbody id="adminTable"></tbody>
+    </table>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div><a class="brand" href="#home">Rent<span>Ease</span></a><p>Affordable living for students.</p></div>
+  <div><b>Platform</b><p>Rent Items · My Rentals · Support · Admin</p></div>
+  <div><b>Project</b><p>Student-focused rental ecosystem · 2026</p></div>
+</footer>
+
+<!-- Login modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal('loginModal')">×</button>
+    <h2>Student Login</h2>
+    <p>Create a demo account to manage rentals.</p>
+    <input id="userName" placeholder="Your name">
+    <input id="userEmail" type="email" placeholder="Email">
+    <input id="userCity" placeholder="City">
+    <button class="primary-btn full" onclick="login()">Continue</button>
+  </div>
+</div>
+
+<!-- Product modal -->
+<div id="productModal" class="modal">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal('productModal')">×</button>
+    <div id="productDetails"></div>
+  </div>
+</div>
+
+<!-- Checkout modal -->
+<div id="checkoutModal" class="modal">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal('checkoutModal')">×</button>
+    <h2>Book Your Rental</h2>
+    <div id="checkoutSummary"></div>
+    <label>Rental duration</label>
+    <select id="duration" onchange="updateCheckout()">
+      <option value="1">1 month</option>
+      <option value="3">3 months</option>
+      <option value="6">6 months</option>
+      <option value="12">12 months</option>
+    </select>
+    <label>Delivery address</label>
+    <textarea id="address" placeholder="Hostel / PG / Flat address"></textarea>
+    <label>Delivery date</label>
+    <input id="deliveryDate" type="date">
+    <button class="primary-btn full" onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+</div>
+
+<!-- Cart drawer -->
+<div id="overlay" onclick="closeCart()"></div>
+<aside id="cartDrawer">
+  <div class="drawer-head"><h2>Your Cart</h2><button onclick="closeCart()">×</button></div>
+  <div id="cartItems"></div>
+  <div class="total"><span>Monthly rent</span><b id="cartTotal">₹0</b></div>
+  <button class="primary-btn full" onclick="startCheckout()">Proceed to Booking</button>
+</aside>
+
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
